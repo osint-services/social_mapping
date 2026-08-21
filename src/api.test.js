@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { buildSearchUrl, searchMap } from './api.js'
+import { associatedPhoneLabel, buildSearchUrl, searchMap } from './api.js'
 
 describe('map API', () => {
   it('builds a canonical search URL', () => {
@@ -13,5 +13,10 @@ describe('map API', () => {
   it('surfaces API errors', async () => {
     const fetcher = vi.fn().mockResolvedValue({ ok: false, status: 404, json: async () => ({ detail: 'place not found' }) })
     await expect(searchMap({ place: 'Missing', radiusMiles: 10, query: '', sources: ['datasets'] }, fetcher)).rejects.toThrow('place not found')
+  })
+
+  it('formats associated phone metadata', () => {
+    expect(associatedPhoneLabel({ phone_number: '+12025550111' })).toBe('+12025550111')
+    expect(associatedPhoneLabel('+12025550112')).toBe('+12025550112')
   })
 })

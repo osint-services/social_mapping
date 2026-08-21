@@ -1,5 +1,10 @@
 export const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '')
 
+export function associatedPhoneLabel(phone) {
+  if (typeof phone === 'string') return phone
+  return phone?.phone_number || phone?.phone || 'Phone record'
+}
+
 export function buildSearchUrl({ place, radiusMiles, query, sources, limit = 100 }, apiBase = API_BASE) {
   const params = new URLSearchParams({
     place: place.trim(),

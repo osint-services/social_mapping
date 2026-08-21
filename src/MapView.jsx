@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import L from 'leaflet'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
+import { associatedPhoneLabel } from './api.js'
 
 const markerIcon = L.divIcon({ className: 'evidence-marker', html: '<span></span>', iconSize: [22, 22], iconAnchor: [11, 11] })
 const originIcon = L.divIcon({ className: 'origin-marker', html: '<span></span>', iconSize: [28, 28], iconAnchor: [14, 14] })
@@ -31,7 +32,7 @@ function MarkerDetails({ item }) {
         {details.distance_miles != null && <><dt>Distance</dt><dd>{details.distance_miles} mi</dd></>}
       </dl>
       {details.associated_phones?.length > 0 && (
-        <p>Associated phone records: {details.associated_phones.map((phone) => phone.phone || phone).join(', ')}</p>
+        <p>Associated phone records: {details.associated_phones.map(associatedPhoneLabel).join(', ')}</p>
       )}
       {details.url && <a href={details.url} target="_blank" rel="noreferrer">Open source</a>}
     </div>
