@@ -5,8 +5,9 @@ export const PointRenderer = (props) => {
   return (
     <>
       {features && features.length && features.map((feature, index) => {
+        const [longitude, latitude] = feature.geometry.coordinates;
         return (
-          <Marker key={index} position={feature.geometry.coordinates}>
+          <Marker key={feature.id || index} position={[latitude, longitude]}>
             <Popup>
               {Object.keys(feature.properties).filter(key => typeof feature.properties[key] === 'string').map(key => {
                 return ( <div key={key}> <b>{key.toUpperCase()}</b> {feature.properties[key]} <br/> </div>);

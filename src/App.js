@@ -2,8 +2,8 @@ import './App.css';
 import { MapRenderer } from './map/MapRenderer';
 import { Toolbar } from './map/Toolbar';
 import { Public, Close } from '@mui/icons-material';
-import { Drawer, IconButton, ListSubheader, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Button } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Drawer, IconButton, ListSubheader, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
 
@@ -14,7 +14,7 @@ function App() {
 
   const [menuSelection, setMenuSelection] = useState('map');
 
-  const columnFields = points.length ? [...Object.keys(points[0].properties).values()] : [];
+  const columnFields = useMemo(() => [...new Set(points.flatMap(point => Object.keys(point.properties || {})))], [points]);
   const columns = columnFields.map(field => {
     return {
       field,
@@ -67,7 +67,16 @@ function App() {
               setFlyTo(searchResponse.origin);
             }}
           />
-          <DataGrid columns={columns} rows={points.map(point => point.properties)}/>
+          <DataGrid
+            columns={columns}
+            rows={points.map((point, index) => ({
+              id: point.id || point.properties?.id || index,
+              ...point.properties,
+            }))}
+            autoHeight
+            disableSelectionOnClick
+            aria-label="Archived social media posts"
+          />
         </div>}
       {menuSelection === 'map' &&
         <div className='mapcontainer'>

@@ -1,7 +1,8 @@
 {
   "name": "social-mapping",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
+  "description": "A React and Leaflet interface for exploring geographically mapped social media posts.",
   "dependencies": {
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
