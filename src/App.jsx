@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import MapView from './MapView.jsx'
-import { searchMap } from './api.js'
+import { associatedPhoneLabel, searchMap } from './api.js'
 
 const EMPTY_COLLECTION = { features: [], providers: {}, metadata: {} }
 
@@ -23,7 +23,7 @@ function ResultCard({ item, onArchive }) {
         {details.distance_miles != null && <Badge>{details.distance_miles} mi</Badge>}
       </div>
       {details.associated_phones?.length > 0 && (
-        <p className="metadata">Associated phones: {details.associated_phones.map((phone) => phone.phone || phone).join(', ')}</p>
+        <p className="metadata">Associated phones: {details.associated_phones.map(associatedPhoneLabel).join(', ')}</p>
       )}
       <details>
         <summary>Provenance</summary>
