@@ -1,71 +1,32 @@
 {
   "name": "social-mapping",
-  "version": "0.2.0",
-  "private": true,
-  "description": "A React and Leaflet interface for exploring geographically mapped social media posts.",
-  "dependencies": {
-    "@emotion/react": "^11.6.0",
-    "@emotion/styled": "^11.6.0",
-    "@mui/icons-material": "^5.1.0",
-    "@mui/lab": "^5.0.0-alpha.54",
-    "@mui/material": "^5.1.0",
-    "@mui/x-data-grid": "^5.2.1",
-    "@react-leaflet/core": "^1.0.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "leaflet": "^1.7.1",
-    "react": "^17.0.2",
-    "react-async": "^10.0.1",
-    "react-dom": "^17.0.2",
-    "react-leaflet": "^3.1.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^1.0.1"
-  },
-  "resolutions": {
-    "decode-uri-component": "0.2.2",
-    "@istanbuljs/load-nyc-config/js-yaml": "3.15.1",
-    "@svgr/webpack/loader-utils": "2.0.4",
-    "resolve-url-loader/**/loader-utils": "2.0.4",
-    "svgo/js-yaml": "3.15.1"
-  },
-  "overrides": {
-    "decode-uri-component": "0.2.2",
-    "@istanbuljs/load-nyc-config": {
-      "js-yaml": "3.15.1"
-    },
-    "@svgr/webpack": {
-      "loader-utils": "2.0.4"
-    },
-    "resolve-url-loader": {
-      "loader-utils": "2.0.4"
-    },
-    "svgo": {
-      "js-yaml": "3.15.1"
-    }
-  },
+  "version": "1.0.0",
+  "private": false,
+  "description": "A geospatial OSINT workspace and API for mapping provider-supplied X locations and imported datasets.",
+  "license": "GPL-3.0-only",
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite --host 0.0.0.0",
+    "start": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "audit": "pnpm audit --prod"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-leaflet": "^5.0.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@vitejs/plugin-react": "^6.1.0",
+    "jsdom": "^30.0.1",
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11"
+  },
+  "engines": { "node": ">=22.12" },
+  "keywords": ["osint", "geospatial", "geojson", "leaflet", "fastapi", "x-api"]
 }
