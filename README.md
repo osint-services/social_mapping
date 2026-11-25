@@ -16,7 +16,7 @@ The project does not infer a person's location from profile text, a phone number
 
 ## Quick start
 
-The API needs Python 3.11 or newer. The client needs Node.js 22.12 or newer and pnpm.
+The API needs Python 3.11 or newer. The client needs pnpm and Node.js 22.22.2+ on the 22.x line, 24.15.0+ on the 24.x line, or 26.0.0 or newer.
 
 ```bash
 python3 -m venv .venv

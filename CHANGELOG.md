@@ -2,6 +2,12 @@
 
 All notable changes to Social Mapping are documented here.
 
+## [Unreleased]
+
+- Query X API v2 directly with HTTPX while keeping the existing bearer-token settings.
+- Align the standalone client Node.js requirement with its locked dependencies.
+- Reject unsupported map sources before resolving the search location.
+
 ## [1.0.0] - 2026-08-21
 
 ### Added

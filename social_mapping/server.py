@@ -74,6 +74,8 @@ async def run_search(
     if not has_place and not (has_latitude and has_longitude):
         raise HTTPException(status_code=422, detail="provide place or a latitude/longitude pair")
 
+    selected = parse_sources(sources)
+
     if has_place:
         try:
             resolved = await get_geocoder().resolve(place or "")
@@ -97,7 +99,6 @@ async def run_search(
         origin_source = "coordinates"
         origin_cached = False
 
-    selected = parse_sources(sources)
     providers = get_providers()
 
     async def invoke(name: str) -> tuple[str, list[dict[str, Any]] | Exception]:
