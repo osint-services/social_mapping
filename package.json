@@ -1,6 +1,6 @@
 {
   "name": "social-mapping",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "description": "A geospatial OSINT workspace and API for mapping provider-supplied X locations and imported datasets.",
   "license": "GPL-3.0-only",
