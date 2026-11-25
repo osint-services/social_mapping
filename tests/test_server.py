@@ -34,6 +34,12 @@ def test_rejects_conflicting_and_unpaired_locations():
     assert client.get("/map/search").status_code == 422
 
 
+def test_rejects_invalid_sources_before_resolving_place():
+    response = client.get("/map/search", params={"place": "Missing", "sources": "unsupported"})
+    assert response.status_code == 422
+    assert response.json()["detail"] == "unsupported sources: unsupported"
+
+
 def test_returns_404_for_unresolved_place():
     response = client.get("/map/search", params={"place": "Missing", "sources": "datasets"})
     assert response.status_code == 404

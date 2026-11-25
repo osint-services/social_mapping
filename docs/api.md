@@ -50,4 +50,4 @@ Nominatim resolves only investigator-entered place text. Requests are server-sid
 - Replace `REACT_APP_API_BASE_URL` with `VITE_API_BASE_URL`.
 - Replace the removed `sm-service` with this repository's FastAPI app.
 - Update client integrations from `/search/tweets` to `/map/search` and consume GeoJSON `origin`, `providers`, and `metadata`.
-- Node.js 22.12 or newer replaces the old Create React App runtime requirement.
+- Use a [supported Node.js version](../README.md#quick-start) for the Vite client.
