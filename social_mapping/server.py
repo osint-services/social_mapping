@@ -15,7 +15,7 @@ from social_mapping.providers import DatasetProvider, XProvider
 
 app = FastAPI(
     title="Social Mapping API",
-    version="1.0.0",
+    version="1.0.1",
     description="GeoJSON search across imported OSINT datasets and provider-supplied X locations.",
 )
 app.add_middleware(
