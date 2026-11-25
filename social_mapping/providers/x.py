@@ -1,40 +1,25 @@
 from __future__ import annotations
 
-import asyncio
-from datetime import datetime, timezone
 from typing import Any
 
-import tweepy
+import httpx
 
 from social_mapping.geo import centroid_from_bbox, feature, haversine_miles
 
 
-def _as_dict(value: Any) -> dict[str, Any]:
-    if value is None:
-        return {}
-    if isinstance(value, dict):
-        return value
-    data = getattr(value, "data", None)
-    if isinstance(data, dict):
-        return data
-    return {key: item for key, item in vars(value).items() if not key.startswith("_")}
-
-
 def normalize_x_response(
-    response: Any,
+    response: dict[str, Any],
     *,
     origin_latitude: float,
     origin_longitude: float,
     radius_miles: float,
 ) -> list[dict[str, Any]]:
-    includes = _as_dict(response).get("includes") or getattr(response, "includes", {}) or {}
-    places = {_as_dict(place).get("id"): _as_dict(place) for place in includes.get("places", [])}
-    users = {_as_dict(user).get("id"): _as_dict(user) for user in includes.get("users", [])}
-    rows = _as_dict(response).get("data") or getattr(response, "data", None) or []
+    includes = response.get("includes") or {}
+    places = {place["id"]: place for place in includes.get("places", [])}
+    users = {user["id"]: user for user in includes.get("users", [])}
     results: list[dict[str, Any]] = []
 
-    for raw in rows:
-        post = _as_dict(raw)
+    for post in response.get("data") or []:
         geo = post.get("geo") or {}
         coordinates = geo.get("coordinates") or {}
         raw_coordinates = coordinates.get("coordinates") if isinstance(coordinates, dict) else None
@@ -58,8 +43,6 @@ def normalize_x_response(
             continue
         author = users.get(post.get("author_id"), {})
         created_at = post.get("created_at")
-        if isinstance(created_at, datetime):
-            created_at = created_at.astimezone(timezone.utc).isoformat()
         post_id = str(post.get("id", "unknown"))
         results.append(
             feature(
@@ -92,8 +75,9 @@ def normalize_x_response(
 class XProvider:
     name = "x"
 
-    def __init__(self, bearer_token: str | None) -> None:
+    def __init__(self, bearer_token: str | None, timeout: float = 15) -> None:
         self.bearer_token = bearer_token
+        self.timeout = timeout
 
     async def search(
         self,
@@ -106,38 +90,35 @@ class XProvider:
     ) -> list[dict[str, Any]]:
         if not self.bearer_token:
             raise RuntimeError("X provider is not configured")
-        return await asyncio.to_thread(
-            self._search_sync,
-            latitude=latitude,
-            longitude=longitude,
-            radius_miles=radius_miles,
-            query=query,
-            limit=limit,
-        )
 
-    def _search_sync(
-        self,
-        *,
-        latitude: float,
-        longitude: float,
-        radius_miles: float,
-        query: str | None,
-        limit: int,
-    ) -> list[dict[str, Any]]:
-        client = tweepy.Client(bearer_token=self.bearer_token, wait_on_rate_limit=False)
         terms = [query.strip()] if query and query.strip() else []
         terms.extend(["has:geo", "-is:retweet"])
-        response = client.search_recent_tweets(
-            query=" ".join(terms),
-            max_results=max(10, min(100, limit)),
-            expansions=["geo.place_id", "author_id"],
-            tweet_fields=["created_at", "geo", "author_id"],
-            place_fields=["geo", "full_name", "country"],
-            user_fields=["username", "name"],
-        )
-        return normalize_x_response(
-            response,
-            origin_latitude=latitude,
-            origin_longitude=longitude,
-            radius_miles=radius_miles,
-        )[:limit]
+        try:
+            async with httpx.AsyncClient(timeout=self.timeout) as client:
+                response = await client.get(
+                    "https://api.x.com/2/tweets/search/recent",
+                    headers={"Authorization": f"Bearer {self.bearer_token}"},
+                    params={
+                        "query": " ".join(terms),
+                        "max_results": max(10, min(100, limit)),
+                        "expansions": "geo.place_id,author_id",
+                        "tweet.fields": "created_at,geo,author_id",
+                        "place.fields": "geo,full_name,country",
+                        "user.fields": "username,name",
+                    },
+                )
+                response.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            raise RuntimeError(f"X recent search returned HTTP {exc.response.status_code}.") from exc
+        except httpx.RequestError as exc:
+            raise RuntimeError("X recent search did not respond.") from exc
+
+        try:
+            return normalize_x_response(
+                response.json(),
+                origin_latitude=latitude,
+                origin_longitude=longitude,
+                radius_miles=radius_miles,
+            )[:limit]
+        except (AttributeError, KeyError, TypeError, ValueError) as exc:
+            raise RuntimeError("X returned invalid recent search data.") from exc
