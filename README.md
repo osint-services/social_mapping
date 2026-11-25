@@ -34,7 +34,7 @@ pnpm dev
 
 Open `http://localhost:5173`. The client calls `http://localhost:8000` by default. Set `VITE_API_BASE_URL` to point it elsewhere.
 
-For the complete credential-free demonstration, use the parent [`platform`](https://github.com/osint-services/platform) Compose stack and import `examples/datasets/geospatial-entities.json`. That sample contains synthetic London, Arlington, and Portland records.
+For the credential-free demonstration, use the Platform Compose stack and import the [geospatial_entities.csv fixture](https://github.com/osint-services/platform/blob/main/examples/datasets/geospatial_entities.csv). It contains synthetic London, Arlington, and Portland records. The Platform [development setup](https://github.com/osint-services/platform#development-setup) includes the import and smoke-test commands.
 
 ## Configuration
 
