@@ -14,6 +14,8 @@ Parameters:
 | `sources` | CSV | `datasets`, `x`, or both; default `x,datasets` |
 | `limit` | integer | 1 to 500; default 100 |
 
+An empty or unsupported `sources` filter returns HTTP 422 before the service resolves the place or calls a search provider.
+
 The response is a GeoJSON `FeatureCollection` with these top-level additions:
 
 - `origin`: a GeoJSON point for the investigator's search origin.
