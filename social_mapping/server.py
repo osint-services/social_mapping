@@ -40,7 +40,7 @@ def get_geocoder() -> NominatimGeocoder:
 def get_providers() -> dict[str, Any]:
     return {
         "datasets": DatasetProvider(settings.dataset_service_url, settings.provider_timeout_seconds),
-        "x": XProvider(settings.x_bearer_token),
+        "x": XProvider(settings.x_bearer_token, settings.provider_timeout_seconds),
     }
 
 
