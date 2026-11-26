@@ -4,6 +4,10 @@ All notable changes to Social Mapping are documented here.
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-11-26
+
+- Update development dependencies to address build and test tool advisories.
+
 ## [1.0.1] - 2026-11-25
 
 - Query X API v2 directly with HTTPX while keeping the existing bearer-token settings.
@@ -39,6 +43,7 @@ All notable changes to Social Mapping are documented here.
 
 - Refined the original frontend prototype and documented its now-retired companion-service flow.
 
+[1.0.2]: https://github.com/osint-services/social_mapping/releases/tag/v1.0.2
 [1.0.1]: https://github.com/osint-services/social_mapping/releases/tag/v1.0.1
 [1.0.0]: https://github.com/osint-services/social_mapping/releases/tag/v1.0.0
 [0.2.0]: https://github.com/osint-services/social_mapping/releases/tag/v0.2.0
